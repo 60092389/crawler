@@ -1,29 +1,19 @@
-[INFO  - 2017-07-20T13:07:28.172Z] GhostDriver - Main - running on port 49618
-[INFO  - 2017-07-20T13:07:29.347Z] Session [625f14f0-6d4c-11e7-b958-f9d459e736ca] - page.settings - {"XSSAuditingEnabled":false,"javascriptCanCloseWindows":true,"javascriptCanOpenWindows":true,"javascriptEnabled":true,"loadImages":true,"localToRemoteUrlAccessEnabled":false,"userAgent":"Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/538.1 (KHTML, like Gecko) PhantomJS/2.1.1 Safari/538.1","webSecurityEnabled":true}
-[INFO  - 2017-07-20T13:07:29.347Z] Session [625f14f0-6d4c-11e7-b958-f9d459e736ca] - page.customHeaders:  - {}
-[INFO  - 2017-07-20T13:07:29.347Z] Session [625f14f0-6d4c-11e7-b958-f9d459e736ca] - Session.negotiatedCapabilities - {"browserName":"phantomjs","version":"2.1.1","driverName":"ghostdriver","driverVersion":"1.2.0","platform":"windows-10-32bit","javascriptEnabled":true,"takesScreenshot":true,"handlesAlerts":false,"databaseEnabled":false,"locationContextEnabled":false,"applicationCacheEnabled":false,"browserConnectionEnabled":false,"cssSelectorsEnabled":true,"webStorageEnabled":false,"rotatable":false,"acceptSslCerts":false,"nativeEvents":true,"proxy":{"proxyType":"direct"}}
-[INFO  - 2017-07-20T13:07:29.347Z] SessionManagerReqHand - _postNewSessionCommand - New Session Created: 625f14f0-6d4c-11e7-b958-f9d459e736ca
-[ERROR - 2017-07-20T13:07:31.550Z] Session [625f14f0-6d4c-11e7-b958-f9d459e736ca] - page.onError - msg: ReferenceError: Can't find variable: mobRf
+[INFO  - 2017-07-21T08:58:01.303Z] GhostDriver - Main - running on port 51000
+[INFO  - 2017-07-21T08:58:02.521Z] Session [b3dc6c50-6df2-11e7-9238-132e40711d92] - page.settings - {"XSSAuditingEnabled":false,"javascriptCanCloseWindows":true,"javascriptCanOpenWindows":true,"javascriptEnabled":true,"loadImages":true,"localToRemoteUrlAccessEnabled":false,"userAgent":"Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/538.1 (KHTML, like Gecko) PhantomJS/2.1.1 Safari/538.1","webSecurityEnabled":true}
+[INFO  - 2017-07-21T08:58:02.521Z] Session [b3dc6c50-6df2-11e7-9238-132e40711d92] - page.customHeaders:  - {}
+[INFO  - 2017-07-21T08:58:02.521Z] Session [b3dc6c50-6df2-11e7-9238-132e40711d92] - Session.negotiatedCapabilities - {"browserName":"phantomjs","version":"2.1.1","driverName":"ghostdriver","driverVersion":"1.2.0","platform":"windows-10-32bit","javascriptEnabled":true,"takesScreenshot":true,"handlesAlerts":false,"databaseEnabled":false,"locationContextEnabled":false,"applicationCacheEnabled":false,"browserConnectionEnabled":false,"cssSelectorsEnabled":true,"webStorageEnabled":false,"rotatable":false,"acceptSslCerts":false,"nativeEvents":true,"proxy":{"proxyType":"direct"}}
+[INFO  - 2017-07-21T08:58:02.521Z] SessionManagerReqHand - _postNewSessionCommand - New Session Created: b3dc6c50-6df2-11e7-9238-132e40711d92
+[ERROR - 2017-07-21T08:58:03.497Z] Session [b3dc6c50-6df2-11e7-9238-132e40711d92] - page.onError - msg: ReferenceError: Can't find variable: $
 
   phantomjs://platform/console++.js:263 in error
-[ERROR - 2017-07-20T13:07:31.550Z] Session [625f14f0-6d4c-11e7-b958-f9d459e736ca] - page.onError - stack:
-  onload (http://mall.hanssem.com/category/goHsmMctgy.do?ctgrNo=7412:3248)
+[ERROR - 2017-07-21T08:58:03.498Z] Session [b3dc6c50-6df2-11e7-9238-132e40711d92] - page.onError - stack:
+  global code (http://www.casamiashop.com/common/js/common1.js:2)
 
   phantomjs://platform/console++.js:263 in error
-[ERROR - 2017-07-20T13:07:36.309Z] Session [625f14f0-6d4c-11e7-b958-f9d459e736ca] - page.onError - msg: TypeError: undefined is not an object (evaluating 'gds_arr[1].substring')
+[ERROR - 2017-07-21T08:58:04.107Z] Session [b3dc6c50-6df2-11e7-9238-132e40711d92] - page.onError - msg: ReferenceError: Can't find variable: $
 
   phantomjs://platform/console++.js:263 in error
-[ERROR - 2017-07-20T13:07:36.310Z] Session [625f14f0-6d4c-11e7-b958-f9d459e736ca] - page.onError - stack:
-  success (undefined:24)
-  j (http://mall.hanssem.com/resources/js/libs/jquery-1.11.3.min.js:2)
-  fireWith (http://mall.hanssem.com/resources/js/libs/jquery-1.11.3.min.js:2)
-  x (http://mall.hanssem.com/resources/js/libs/jquery-1.11.3.min.js:5)
-  b (http://mall.hanssem.com/resources/js/libs/jquery-1.11.3.min.js:5)
-  send (http://mall.hanssem.com/resources/js/libs/jquery-1.11.3.min.js:5)
-  ajax (http://mall.hanssem.com/resources/js/libs/jquery-1.11.3.min.js:5)
-  (anonymous function) (:7)
-  j (http://mall.hanssem.com/resources/js/libs/jquery-1.11.3.min.js:2)
-  add (http://mall.hanssem.com/resources/js/libs/jquery-1.11.3.min.js:2)
-  ready (http://mall.hanssem.com/resources/js/libs/jquery-1.11.3.min.js:2)
+[ERROR - 2017-07-21T08:58:04.107Z] Session [b3dc6c50-6df2-11e7-9238-132e40711d92] - page.onError - stack:
+  global code (http://www.casamiashop.com/category/category.casa?ctgy_code=20002:101)
 
   phantomjs://platform/console++.js:263 in error
