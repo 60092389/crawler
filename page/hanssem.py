@@ -60,11 +60,16 @@ def fetch_fur_link(fur_kind_link):
     driver.get(fur_kind_link)
     
     #kk = soup.find('a', onclick='linkPage(2); return false;')
-    num_arr = ['1','2','3','4','5']
+    num_arr_str = ['1','2','3','4','5']
     result_links = []
+    num_arr = []
+    
+    for num in num_arr_str:
+        num_arr.append(int(num))
+    
 
     for num in num_arr:
-        if num!='1':
+        if num%5!=1:
             kk=driver.find_element_by_link_text(num)
             driver.implicitly_wait(10)
             kk.click()
