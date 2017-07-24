@@ -7,6 +7,7 @@ Created on 2017. 7. 20.
 import urllib.request
 import re
 from pip.utils.ui import DownloadProgressSpinner
+from collections import OrderedDict
 
 ok = ['1','2','3']
 ok2 = ['4','5','6']
@@ -38,8 +39,21 @@ for ss in sss:
     print(ss)
     ok = c.search(ss)
     print(ok)
+    
+    
+    
+ddd = ['1','2','3','4','5','6','7','21','31','40','41','42','41','42','41','42']
+ddd_int = []
+
+for i in ddd:
+    ddd_int.append(int(i))
+
+mySet = set(ddd_int)
+changed_list = list(mySet)
 
 
+
+print(sorted(changed_list))
 
 
 
