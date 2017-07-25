@@ -24,7 +24,7 @@ driver = webdriver.PhantomJS(executable_path=r'C:\phantomjs-2.1.1-windows\bin\ph
 
 
 basic_url = 'http://www.casamiashop.com'
-link = 'http://www.casamiashop.com/goods/detail.casa?pkg_code=0015399'
+#link = 'http://www.casamiashop.com/goods/detail.casa?pkg_code=0015399'
 #link = 'http://www.casamiashop.com/goods/detail.casa?pkg_code=0016282'
 
 def ferch_post_contents(link):
@@ -44,6 +44,7 @@ def ferch_post_contents(link):
     detail_info_table = soup.find('table', class_='write_form')
     #print(detail_info_table)
     
+
     table_tr = detail_info_table.find_all('tr')
     #print(table_tr)   
     name_tr = table_tr[0]
@@ -52,6 +53,7 @@ def ferch_post_contents(link):
     color_td = color_tr.find_all('td')
     size_tr = table_tr[3]
     size_td = size_tr.find_all('td')
+
     
     
     
@@ -160,6 +162,8 @@ def ferch_post_contents(link):
     elif re.search('\+', size):
         size_list =re.split('\+', size)
         size = size_list[0]
+    elif re.search(':', size):
+        size = size_list[0]
     
     try:
         if re.search('\d', size):
@@ -168,9 +172,15 @@ def ferch_post_contents(link):
             #print(size_split)
         else:
             craw_fur_size='사이트참고'
-    
-        for i in (0,1,2):
-            craw_fur_size.append(size_split[i])
+        
+        if craw_fur_size.__len__() >=3:
+            for i in (0,1,2):
+                craw_fur_size.append(size_split[i])
+        elif craw_fur_size.__len__() ==2:
+            for i in(0,1):
+                craw_fur_size.append(size.split[i])
+        else:
+            craw_fur_size = ''
     except:
         craw_fur_size = ''
         
@@ -211,11 +221,9 @@ def ferch_post_contents(link):
         'craw_fur_concpet_name' : craw_fur_concept_name
         }
     
-ok = ferch_post_contents(link)
-print(ok)
+#ok = ferch_post_contents(link)
+#print(ok)
 
-coll = mongoConnect.collection
-coll.insert(ok)
 
 
 
