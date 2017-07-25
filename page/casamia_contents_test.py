@@ -17,16 +17,18 @@ driver = webdriver.PhantomJS(executable_path=r'C:\phantomjs-2.1.1-windows\bin\ph
 
 
 basic_url = 'http://www.casamiashop.com'
-link = 'http://www.casamiashop.com/goods/detail.casa?pkg_code=0015859'
+link = 'http://www.casamiashop.com/goods/detail.casa?pkg_code=0017899'
 #link = 'http://www.casamiashop.com/goods/detail.casa?pkg_code=0016282'
 
 def ferch_post_contents(link):
     #URL = link
     #res = urllib.request.urlopen(URL)
     #html = res.read()
-    
+    driver.refresh()
     driver.get(link)
     html = driver.page_source
+    
+    driver.implicitly_wait(3)
     
     soup = BeautifulSoup(html, 'html.parser')
     basic_info_div = soup.find('div', class_='goods_info_box')
@@ -36,7 +38,7 @@ def ferch_post_contents(link):
     #print(detail_info_table)
     
     table_tr = detail_info_table.find_all('tr')
-    print(table_tr)   
+    #print(table_tr)   
     name_tr = table_tr[0]
     name_td = name_tr.find_all('td')
     color_tr = table_tr[1] 
@@ -70,6 +72,8 @@ def ferch_post_contents(link):
     if re.search(']', temp_craw_fur_price):
         craw_fur_price = re.split('] ', temp_craw_fur_price)
         temp_craw_fur_price = re.findall("\d+", craw_fur_price[1])
+    else:
+        temp_craw_fur_price = re.findall("\d+", temp_craw_fur_price)
     
     craw_fur_price = ''
     for price in temp_craw_fur_price:
@@ -150,20 +154,41 @@ def ferch_post_contents(link):
         size_list =re.split('\+', size)
         size = size_list[0]
     
-    if re.search('\d', size):
-        size_split = re.findall('\d+', size)
-        print(size)
-        print(size_split)
+    try:
+        if re.search('\d', size):
+            size_split = re.findall('\d+', size)
+            #print(size)
+            #print(size_split)
+        else:
+            craw_fur_size='사이트참고'
     
         for i in (0,1,2):
             craw_fur_size.append(size_split[i])
-            
-        print(craw_fur_size)
-    else:
-        craw_fur_size='사이트참고'
+    except:
+        craw_fur_size = ''
+        
+    
         
         
     #가구 컨셉
+    concept_color = color_td[1].text
+    
+    if re.search('전통|동양|중국|일본|한국|아시아', concept_color):
+        craw_fur_concept_name = '동양적'
+    elif re.search('순박|벽돌|복고|레트로|소박', concept_color):
+        craw_fur_concept_name = '시골풍'
+    elif re.search('워시|러스틱|브라운|카멜|월넛|금장', concept_color):
+        craw_fur_concept_name = '앤틱'
+    elif re.search('내츄럴|원목|내추럴|브라우니|자연', concept_color):
+        craw_fur_concept_name = '내추럴'
+    elif re.search('그레이|베이지|민트|블루|크림|멜란지브라운|딥블루|그린|스칸디', concept_color):
+        craw_fur_concept_name = '북유럽'
+    elif re.search('오크|화이트|아이보리|블랙', concept_color):
+        craw_fur_concept_name = '모던'
+    else:
+        craw_fur_concept_name = '모던'
+    
+        
     
     
     return  {

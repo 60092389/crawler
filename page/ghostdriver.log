@@ -1,19 +1,19 @@
-[INFO  - 2017-07-21T08:58:01.303Z] GhostDriver - Main - running on port 51000
-[INFO  - 2017-07-21T08:58:02.521Z] Session [b3dc6c50-6df2-11e7-9238-132e40711d92] - page.settings - {"XSSAuditingEnabled":false,"javascriptCanCloseWindows":true,"javascriptCanOpenWindows":true,"javascriptEnabled":true,"loadImages":true,"localToRemoteUrlAccessEnabled":false,"userAgent":"Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/538.1 (KHTML, like Gecko) PhantomJS/2.1.1 Safari/538.1","webSecurityEnabled":true}
-[INFO  - 2017-07-21T08:58:02.521Z] Session [b3dc6c50-6df2-11e7-9238-132e40711d92] - page.customHeaders:  - {}
-[INFO  - 2017-07-21T08:58:02.521Z] Session [b3dc6c50-6df2-11e7-9238-132e40711d92] - Session.negotiatedCapabilities - {"browserName":"phantomjs","version":"2.1.1","driverName":"ghostdriver","driverVersion":"1.2.0","platform":"windows-10-32bit","javascriptEnabled":true,"takesScreenshot":true,"handlesAlerts":false,"databaseEnabled":false,"locationContextEnabled":false,"applicationCacheEnabled":false,"browserConnectionEnabled":false,"cssSelectorsEnabled":true,"webStorageEnabled":false,"rotatable":false,"acceptSslCerts":false,"nativeEvents":true,"proxy":{"proxyType":"direct"}}
-[INFO  - 2017-07-21T08:58:02.521Z] SessionManagerReqHand - _postNewSessionCommand - New Session Created: b3dc6c50-6df2-11e7-9238-132e40711d92
-[ERROR - 2017-07-21T08:58:03.497Z] Session [b3dc6c50-6df2-11e7-9238-132e40711d92] - page.onError - msg: ReferenceError: Can't find variable: $
+[INFO  - 2017-07-25T01:15:06.007Z] GhostDriver - Main - running on port 14946
+[INFO  - 2017-07-25T01:15:07.881Z] Session [b28851c0-70d6-11e7-8e3d-8ff898228576] - page.settings - {"XSSAuditingEnabled":false,"javascriptCanCloseWindows":true,"javascriptCanOpenWindows":true,"javascriptEnabled":true,"loadImages":true,"localToRemoteUrlAccessEnabled":false,"userAgent":"Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/538.1 (KHTML, like Gecko) PhantomJS/2.1.1 Safari/538.1","webSecurityEnabled":true}
+[INFO  - 2017-07-25T01:15:07.881Z] Session [b28851c0-70d6-11e7-8e3d-8ff898228576] - page.customHeaders:  - {}
+[INFO  - 2017-07-25T01:15:07.881Z] Session [b28851c0-70d6-11e7-8e3d-8ff898228576] - Session.negotiatedCapabilities - {"browserName":"phantomjs","version":"2.1.1","driverName":"ghostdriver","driverVersion":"1.2.0","platform":"windows-10-32bit","javascriptEnabled":true,"takesScreenshot":true,"handlesAlerts":false,"databaseEnabled":false,"locationContextEnabled":false,"applicationCacheEnabled":false,"browserConnectionEnabled":false,"cssSelectorsEnabled":true,"webStorageEnabled":false,"rotatable":false,"acceptSslCerts":false,"nativeEvents":true,"proxy":{"proxyType":"direct"}}
+[INFO  - 2017-07-25T01:15:07.881Z] SessionManagerReqHand - _postNewSessionCommand - New Session Created: b28851c0-70d6-11e7-8e3d-8ff898228576
+[ERROR - 2017-07-25T01:15:08.769Z] Session [b28851c0-70d6-11e7-8e3d-8ff898228576] - page.onError - msg: ReferenceError: Can't find variable: $
 
   phantomjs://platform/console++.js:263 in error
-[ERROR - 2017-07-21T08:58:03.498Z] Session [b3dc6c50-6df2-11e7-9238-132e40711d92] - page.onError - stack:
+[ERROR - 2017-07-25T01:15:08.770Z] Session [b28851c0-70d6-11e7-8e3d-8ff898228576] - page.onError - stack:
   global code (http://www.casamiashop.com/common/js/common1.js:2)
 
   phantomjs://platform/console++.js:263 in error
-[ERROR - 2017-07-21T08:58:04.107Z] Session [b3dc6c50-6df2-11e7-9238-132e40711d92] - page.onError - msg: ReferenceError: Can't find variable: $
+[ERROR - 2017-07-25T01:15:09.493Z] Session [b28851c0-70d6-11e7-8e3d-8ff898228576] - page.onError - msg: ReferenceError: Can't find variable: $
 
   phantomjs://platform/console++.js:263 in error
-[ERROR - 2017-07-21T08:58:04.107Z] Session [b3dc6c50-6df2-11e7-9238-132e40711d92] - page.onError - stack:
-  global code (http://www.casamiashop.com/category/category.casa?ctgy_code=20002:101)
+[ERROR - 2017-07-25T01:15:09.494Z] Session [b28851c0-70d6-11e7-8e3d-8ff898228576] - page.onError - stack:
+  global code (http://www.casamiashop.com/goods/detail.casa?pkg_code=0017899:101)
 
   phantomjs://platform/console++.js:263 in error
