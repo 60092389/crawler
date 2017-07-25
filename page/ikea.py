@@ -8,7 +8,10 @@ import urllib.request
 from bs4 import BeautifulSoup
 import re
 from pickle import NONE
+import mongoConnect
 
+
+conn = mongoConnect.collection
 ###########거실##########
 #소파
 #target_url = 'http://www.ikea.com/kr/ko/catalog/categories/departments/living_room/39130/'
@@ -268,6 +271,7 @@ for URL in target_url:
         if re.search('소파|침대|책상|옷장|받침대|수납장|장식장|테이블|책장|의자|서랍|화장대', result.get('craw_fur_kind_name')):
             i=i+1
             print(result)
+            conn.insert(result)
         
 
 print(i)

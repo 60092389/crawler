@@ -11,13 +11,20 @@ from selenium.webdriver.common.keys import Keys
 import re
 from time import sleep
 from collections import OrderedDict
+import mongoConnect
+
+"""
+connection = pymongo.MongoClient('192.168.1.28', 27017)
+db = connection.gaduda
+collection = db.crawling_furniture
+"""
 
 #driver = webdriver.Chrome('D:\chromedriver_win32\chromedriver')
 driver = webdriver.PhantomJS(executable_path=r'C:\phantomjs-2.1.1-windows\bin\phantomjs')
 
 
 basic_url = 'http://www.casamiashop.com'
-link = 'http://www.casamiashop.com/goods/detail.casa?pkg_code=0017899'
+link = 'http://www.casamiashop.com/goods/detail.casa?pkg_code=0015399'
 #link = 'http://www.casamiashop.com/goods/detail.casa?pkg_code=0016282'
 
 def ferch_post_contents(link):
@@ -205,7 +212,10 @@ def ferch_post_contents(link):
         }
     
 ok = ferch_post_contents(link)
-print(ok) 
+print(ok)
+
+coll = mongoConnect.collection
+coll.insert(ok)
 
 
 
