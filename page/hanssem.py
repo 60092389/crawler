@@ -118,11 +118,58 @@ def fetch_post_contents(post_link):
     
     soup = BeautifulSoup(html, 'html.parser')
     
-    div = soup.find('div', class_='detail_wrap')
-    dd=''
-    return div
+    detail_div = soup.find('div', class_='detail_wrap')
+    
+    
+    craw_fur_name =''
+    craw_fur_item_no = ''
+    craw_fur_brand = ''
+    craw_fur_price = ''
+    craw_fur_room_kind_name = ''
+    craw_fur_kind_name = ''
+    craw_fur_brand_site = ''
+    craw_fur_img = ''
+    craw_fur_size = []
+    craw_fur_concept_name = ''
+    
+    
+    #가구 이름
+    detail_tit = detail_div.find('div', class_='detail_tit')
+    
+    fur_title = detail_tit.find('h2').text
+    fur_title = re.sub('\[\w*\]', '', fur_title, 1)
+    fur_title = re.sub('★\w*★', '' ,fur_title)
+    fur_title = re.sub('★\w* \w*★', '' ,fur_title)
+    fur_title = re.sub('^ *', '', fur_title)
+    
+    craw_fur_name = fur_title
+    
+    
+    #가구 브랜드
+    
+    
+    #가구 가격
+    price_div = detail_div.find('div', class_='detatil_opt_info_left')
+    price_div_ul = price_div.find_all('ul', class_='opt_list')
+    price_ul = price_div_ul[0]
+    print(price_ul)
+    
+    
+    
+    return  {
+        'craw_fur_name' : craw_fur_name,       
+        'craw_fur_item_no' : craw_fur_item_no,
+        'craw_fur_brand' : craw_fur_brand,
+        'craw_fur_price' : craw_fur_price,
+        'craw_fur_room_kind_name' : craw_fur_room_kind_name,
+        'craw_fur_kind_name' : craw_fur_kind_name,
+        'craw_fur_brand_site' : craw_fur_brand_site,
+        'craw_fur_img' : craw_fur_img,
+        'craw_fur_size' : craw_fur_size,
+        'craw_fur_concpet_name' : craw_fur_concept_name
+        }
 
-b= 'http://mall.hanssem.com/goods/goodsDetailMall.do?gdsNo=210017&categoryPagelist=1'
+b= 'http://mall.hanssem.com/goods/goodsDetailMall.do?gdsNo=333164&categoryPagelist=1'
 
 a = fetch_post_contents(b)
 print(a)
