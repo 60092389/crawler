@@ -25,7 +25,7 @@ driver = webdriver.PhantomJS(executable_path=r'C:\phantomjs-2.1.1-windows\bin\ph
 
 basic_url = 'http://www.casamiashop.com'
 #link = 'http://www.casamiashop.com/goods/detail.casa?pkg_code=0015399'
-#link = 'http://www.casamiashop.com/goods/detail.casa?pkg_code=0016282'
+#link = 'http://www.casamiashop.com/goods/detail.casa?pkg_code=0021886'
 
 def ferch_post_contents(link):
     #URL = link
@@ -36,6 +36,7 @@ def ferch_post_contents(link):
     html = driver.page_source
     
     driver.implicitly_wait(3)
+    sleep(2)
     
     soup = BeautifulSoup(html, 'html.parser')
     basic_info_div = soup.find('div', class_='goods_info_box')
@@ -173,10 +174,10 @@ def ferch_post_contents(link):
         else:
             craw_fur_size='사이트참고'
         
-        if craw_fur_size.__len__() >=3:
+        if len(size_split) >=3:
             for i in (0,1,2):
                 craw_fur_size.append(size_split[i])
-        elif craw_fur_size.__len__() ==2:
+        elif len(size_split) ==2:
             for i in(0,1):
                 craw_fur_size.append(size.split[i])
         else:

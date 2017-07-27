@@ -11,6 +11,12 @@ from selenium.webdriver.common.keys import Keys
 import re
 from time import sleep
 from collections import OrderedDict
+import casamia_contents_test
+import mongoConnect
+
+conn = mongoConnect.collection
+
+
 
 
 #driver = webdriver.Chrome('D:\chromedriver_win32\chromedriver')
@@ -40,9 +46,13 @@ def fetch_fur_kind_link():
     links = [basic_url+ab.find('a')['href'] for ab in link]
     
     total_links = []
-    for i in range(0,10):
-        total_links.append(links[i])
-    
+    #for i in range(0,2):
+    #for i in range(1,2):
+    #    total_links.append(links[i])
+    #for i in range(3,10):
+    #    total_links.append(links[i])
+    for i in range(4,10):
+        total_links.append(links[i])    
     for i in range(14,19):
         total_links.append(links[i])
     
@@ -62,15 +72,23 @@ def fetch_pages_num(URL):
     
     for k in range(0,5): 
         if k>0:
-            page_next = driver.find_element_by_partial_link_text('다음페이지')
-            driver.implicitly_wait(5)
-            page_next.click()
-            sleep(2)
+            
+            try:
+                page_next = driver.find_element_by_partial_link_text('다음페이지')
+                driver.implicitly_wait(6)
+                page_next.click()
+                sleep(3)
+            except:
+                page_next = driver.find_element_by_partial_link_text('다음페이지')
+                driver.implicitly_wait(6)
+                print('pagenum 세기 에러')
+                page_next.click()
+                sleep(3)
         else:
-            driver.implicitly_wait(3)
+            driver.implicitly_wait(5)
             sleep(2)
             
-            pages_nums_text = []
+        pages_nums_text = []
         try:  
             page_sources = driver.page_source
             temp_soup = BeautifulSoup(page_sources, 'html.parser')
@@ -80,7 +98,7 @@ def fetch_pages_num(URL):
         
             
             pages_nums_text = [ab.find('a').text for ab in pages_nums]
-        except AttributeError:
+        except:
             print('pages_nums에러발생')
             pages_nums_text = ['1']
     
@@ -114,12 +132,21 @@ def fetch_post_link(url, pages_num):
     all_links = []
     
     for i in pages_num:
-        page_num = driver.find_element_by_link_text(i)
-        print(i)
-        driver.implicitly_wait(6)
-        page_num.click()
-   
-        sleep(2)
+        
+        try:
+            page_num = driver.find_element_by_link_text(i)
+            print(i)
+            print(page_num)
+            driver.implicitly_wait(7)
+            page_num.click()
+            sleep(3)
+        except:
+            print('Pagenum 클릭에러')
+            driver.refresh()
+            page_num = driver.find_element_by_link_text(i)
+            driver.implicitly_wait(8)    
+            page_num.click()
+            sleep(5)
         
         html = driver.page_source
         soup = BeautifulSoup(html, 'html.parser')
@@ -135,8 +162,12 @@ def fetch_post_link(url, pages_num):
         if int(i)%10==0:
             page_next = driver.find_element_by_partial_link_text('다음페이지')
             driver.implicitly_wait(5)
-            page_next.click()
-            #sleep(3)
+            try:
+                page_next.click()
+            except:
+                print('다음페이지 클릭 에러')
+                page_next.click()
+                sleep(3)
         
 
     return all_links
@@ -158,14 +189,21 @@ url_links = fetch_fur_kind_link()
 print(url_links)
 
 total_links_count = 0
-
+total_contents_count = 0
 for url in url_links:
     pages_nums = fetch_pages_num(url)
     post_links = fetch_post_link(url,pages_nums)
-    print(post_links.__len__())
-    total_links_count = total_links_count + post_links.__len__()
-    
-print(total_links_count)  
+    for link in post_links:
+        try:
+            contents = casamia_contents_test.ferch_post_contents(link)      
+            conn.insert(contents)
+            print(contents)           
+            total_contetns_count = total_contents_count +1
+            print(total_contents_count)
+        except:
+            print('컨텐츠에서 에러')
+            continue
+print(total_contents_count)  
 
 
 

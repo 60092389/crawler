@@ -57,9 +57,33 @@ print(sorted(changed_list))
 
 
 
+craw_fur_size = []
+size_split = ['103','200','400']
 
 
+if len(size_split)>=3:
+    for i in (0,1,2):
+        craw_fur_size.append(size_split[i])
+elif len(size_split)==2:
+    for i in(0,1):
+        craw_fur_size.append(size_split[i])
+else:
+    craw_fur_size = ''
 
+print(craw_fur_size)
+
+
+#p = '★포토후기이벤트★ 가구야 772 큰서랍형 슈퍼싱글침대 (매트리스 택1)'
+#p = '★SALE★콤비 전신거울 화장대 의자 14종'
+#p = '★BEST모음전★ [FM디자인] 홈데코 코마 서랍 3종1택'
+p = '[최저가보장] ★세트구매시방수커버증정 컬러★ [okok] 원목침대 SS/Q 12종모음 (포토후기 공기청정기증정)'
+#p = '한샘 아임 침대 SS 서랍형 (컬러 2종/택1, 매트별도)'
+
+p = re.sub('\[\w*\]', '', p, 1)
+p = re.sub('★\w*★', '' ,p)
+p = re.sub('★\w* \w*★', '' ,p)
+p = re.sub('^ *', '', p)
+print(p)
 
 
 

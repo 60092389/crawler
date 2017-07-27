@@ -9,6 +9,7 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import re
+from _ast import Div
 
 
 #driver = webdriver.Chrome('D:\chromedriver_win32\chromedriver')
@@ -27,40 +28,54 @@ def fetch_room_kind_link():
     all_category = soup.find('div', class_='all_category')
     dep1_list = all_category.find_all('div', class_='dep1')
     
-    lnb_list_links = [ab.find('a', class_='lnb_list')['href'] for ab in dep1_list]
-    lnb_list_links = [lnb_list_links[0],lnb_list_links[1],lnb_list_links[2],lnb_list_links[3]]
+    total_links = []
     
-    return lnb_list_links
+    bedroom_li = dep1_list[0].find_all('li')
+    bedroom_links = [ab.find('a')['href'] for ab in bedroom_li]
+    for i in range(2,6):
+        total_links.append(bedroom_links[i])
+    for i in range(8,10):
+        total_links.append(bedroom_links[i])
+    
+    closet_li = dep1_list[1].find_all('li')
+    closet_links = [ab.find('a')['href'] for ab in closet_li]
+    for i in range(3,13):
+        total_links.append(closet_links[i])
+        
+    
+    livingroom_li = dep1_list[2].find_all('li')
+    livingroom_links = [ab.find('a')['href'] for ab in livingroom_li]
+    for i in range(0,10):
+        total_links.append(livingroom_links[i])
+    
+    homeoffice_li = dep1_list[3].find_all('li')
+    homeoffice_links = [ab.find('a')['href'] for ab in homeoffice_li]
+    for i in range(0,6):
+        total_links.append(homeoffice_links[i])
+    
+    
+    return total_links
 #link = fetch_room_kind_link()
 
 #print(link)
 
 
-def fetch_fur_kind_link(fur_room_kind_link):
-    driver.get(fur_room_kind_link)
-    html = driver.page_source
-       
-    soup = BeautifulSoup(html, 'html.parser')
-    contents_left = soup.find('div', class_='contents_left')
-    contents_left_lnb = contents_left.find('div', class_='lnb')
-    fur_kind_ul = contents_left_lnb.find('ul')
-    link_list = fur_kind_ul.find_all('li', class_='dep1 bdt')
-    
-    links =[]
-    links = [basic_url+ab.find('a')['href'] for ab in link_list]
-    
-    return links
-
-#link1 = fetch_fur_kind_link('http://mall.hanssem.com/category/LCtgr3811.html?ctgrNo=3811&categoryall=L3811')
-#print(link1)
-
-
-
 def fetch_fur_link(fur_kind_link):
     driver.get(fur_kind_link)
     
+    page_num_html = driver.page_source
+    
+    page_num_soup = BeautifulSoup(page_num_html, 'html.parser')
+    
+    page_div = page_num_soup.find('div', class_='paging')
+    page_list = page_div.find('span', class_='list').text
+    
+    num_split = re.findall('\d', page_list)
+    
+    print(num_split)
+    
     #kk = soup.find('a', onclick='linkPage(2); return false;')
-    num_arr_str = ['1','2','3','4','5']
+    num_arr_str = num_split
     result_links = []
     num_arr = []
     
@@ -85,15 +100,35 @@ def fetch_fur_link(fur_kind_link):
         links = []
     
         links = [basic_url+ab.find('a')['href'] for ab in product_list]
-        result_links = links + result_links
+        result_links = result_links + links
         
     
  
-    driver.close()
-    return result_links.__len__()
+    return result_links
 
-link = fetch_fur_link('http://mall.hanssem.com/category/goHsmMctgy.do?ctgrNo=7412')
-print(link)
+#link = fetch_fur_link('http://mall.hanssem.com/category/goHsmMctgy.do?ctgrNo=6998&categoryall=M6998')
+#print(link)
+
+
+
+def fetch_post_contents(post_link):
+    URL = post_link
+    res = urllib.request.urlopen(URL)
+    html  = res.read()
+    
+    soup = BeautifulSoup(html, 'html.parser')
+    
+    div = soup.find('div', class_='detail_wrap')
+    dd=''
+    return div
+
+b= 'http://mall.hanssem.com/goods/goodsDetailMall.do?gdsNo=210017&categoryPagelist=1'
+
+a = fetch_post_contents(b)
+print(a)
+
+
+
 
 
     
