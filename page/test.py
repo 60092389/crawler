@@ -112,8 +112,7 @@ elif re.search('', o2):
 if re.search('ㅣ', o):
     a = re.split('ㅣ', o)
     print(a)
-"""
-craw_fur_size = []
+" ㅍ_size = []
 size =''
 if re.search('cm|CM|Cm', size_info):
     size_info = re.sub('\d,\d', '', size_info)
@@ -206,9 +205,18 @@ else:
 
         
 print(craw_fur_size)
+"""
+
+k = '상품 상세설명 참조'
+i = []
+if re.search('상세', k):
+    i = '후'
+print(i)
 
 
-
+w = '폴앤코'
+if re.search('가구야|폴앤코코', w):
+    print(w)
 
 
 

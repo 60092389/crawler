@@ -9,8 +9,9 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import re
+import mongoConnect
 
-
+conn = mongoConnect.collection
 
 
 #driver = webdriver.Chrome('D:\chromedriver_win32\chromedriver')
@@ -119,6 +120,8 @@ def fetch_post_contents(post_link):
     #html  = res.read()
     
     driver.get(post_link)
+    
+    
     html = driver.page_source
     
     soup = BeautifulSoup(html, 'html.parser')
@@ -208,6 +211,8 @@ def fetch_post_contents(post_link):
     if re.search('침실|침대', fur_kind):
         if re.search('침대|bed|베드', craw_fur_name):
             craw_fur_kind_name = '침대'
+        if re.search('커튼', craw_fur_name):
+            craw_fur_kind_name = ''
     elif re.search('화장대|스툴|거울', fur_kind):       
         if re.search('의자|스툴', craw_fur_name):
             craw_fur_kind_name = '의자'
@@ -252,7 +257,7 @@ def fetch_post_contents(post_link):
         else:
             craw_fur_kind_name = ''
     elif re.search('책상', fur_kind):
-        if re.search('보드|매트|패드', craw_fur_name):
+        if re.search('보드|매트|패드|뚜껑|박스', craw_fur_name):
             craw_fur_kind_name = ''
         elif re.search('책상|데스크|desk|Desk', craw_fur_name):
             craw_fur_kind_name = '책상'
@@ -289,10 +294,13 @@ def fetch_post_contents(post_link):
         size_info_tr = detail_info_tr[1]
         size_info_td = size_info_tr.find_all('td')
         size_info = size_info_td[0].text
-        print(size_info)
+        #print(size_info)
+        
+        if re.search('상세', size_info):
+            craw_fur_size = ''
         
         size =''
-        if re.search('cm|CM|Cm', size_info):
+        if re.search('cm|CM|Cm|\.', size_info):
             size_info = re.sub('\d,\d', '', size_info)
             if re.search('l', size_info):
                 size_split = re.split('l', size_info)
@@ -320,7 +328,13 @@ def fetch_post_contents(post_link):
             size = re.sub('\/\d+', '', size)
     
             size_num = re.findall('\d+', size)
+            if size_num == []:
+                size = size_split[1]
+                size = re.sub('\.\d', '' , size)
+                size = re.sub('\~\d+', '' ,size)
+                size = re.sub('\/\d+', '', size)
     
+            size_num = re.findall('\d+', size)
             for i in range(0,len(size_num)):
                 size_num[i] = size_num[i]+'0'
     
@@ -332,7 +346,8 @@ def fetch_post_contents(post_link):
                     craw_fur_size.append(size_num[i])
     
          
-        elif re.search('mm|MM|', size_info):
+        elif re.search('mm|MM', size_info):
+            
             size_info = re.sub('\d,\d', '', size_info)
             if re.search('l', size_info):
                 size_split = re.split('l', size_info)
@@ -360,6 +375,12 @@ def fetch_post_contents(post_link):
             size = re.sub('\/\d+', '', size)
     
             size_num = re.findall('\d+', size)
+            
+            if size_num == []:
+                size = size_split[1]
+                size = re.sub('\.\d', '' , size)
+                size = re.sub('\~\d+', '' ,size)
+                size = re.sub('\/\d+', '', size)
 
     
             if len(size_num) >=3:
@@ -376,24 +397,58 @@ def fetch_post_contents(post_link):
             size_info = re.sub('\d,\d', '', size_info)
             size = size_info
             size_num = re.findall('\d+', size)
-    
+            
+            
+            
             if len(size_num) >=3:
                 for i in range(0,3):
-                    craw_fur_size.append(size_num[i])
+                    if re.search('침대', craw_fur_name) and len(size_num[1])==3:
+                        craw_fur_size.append(size_num[i]+'0')
+                    else:
+                        craw_fur_size.append(size_num[i])          
             elif len(size_num) <3:
                 for i in range(0,len(size_num)):
-                    craw_fur_size.append(size_num[i])
+                    if re.search('침대', craw_fur_name) and len(size_num[1])==3:
+                        craw_fur_size.append(size_num[i]+'0')
+                    else:
+                        craw_fur_size.append(size_num[i])  
 
         
-        print(craw_fur_size)
+        #print(craw_fur_size)
         
     except: 
         craw_fur_size = ''
     
     
+    
     #컨셉
+    color_info_tr = detail_info_tr[0]
+    color_info_td = color_info_tr.find_all('td')
+    color_info = color_info_td[0].text
+    #print(color_info)
     
-    
+    if re.search('동양|일본|한국|중국|전통', color_info):
+        craw_fur_concept_name = '동양적'
+    elif re.search('시골|러스틱|거친', color_info):
+        craw_fur_concept_name = '시골풍'
+    elif re.search('메이플|내추럴|내츄럴|월넛|괴목', color_info):
+        craw_fur_concept_name = '내추럴'
+    elif re.search('레트로|빈티지|앤틱|엔틱|브라운', color_info):
+        craw_fur_concept_name = '앤틱'
+    elif re.search('코튼|블루|그레이|민트|오렌지|레드|그린|인디고|핑크|유럽|아메', color_info):
+        craw_fur_concept_name = '북유럽'
+    elif re.search('화이트|블랙|모던', color_info):
+        craw_fur_concept_name = '모던'
+    else:
+        craw_fur_concept_name = '모던'
+        if re.search('가구야|폴앤코코', craw_fur_brand):
+            craw_fur_concept_name = '내추럴'
+        elif re.search('파로마|에인하우스|채우리', craw_fur_brand):
+            craw_fur_concept_name = '모던'
+        elif re.search('룸앤홈|웨스트프롬', craw_fur_brand):
+            craw_fur_concept_name = '북유럽'
+        elif re.search('유캐슬|바네스데코', craw_fur_brand):
+            craw_fur_concept_name = '앤틱'
     
     return  {
         'craw_fur_name' : craw_fur_name,       
@@ -410,20 +465,43 @@ def fetch_post_contents(post_link):
 
 #b= 'http://mall.hanssem.com/goods/goodsDetailMall.do?gdsNo=319577&categoryPagelist=1'
 
-links = ['http://mall.hanssem.com/goods/goodsDetailMall.do?gdsNo=213665&categoryPagelist=2',
-         'http://mall.hanssem.com/goods/goodsDetailMall.do?gdsNo=244750',
-         'http://mall.hanssem.com/goods/goodsDetailMall.do?gdsNo=239508&categoryPagelist=1',
-         'http://mall.hanssem.com/goods/goodsDetailMall.do?gdsNo=349836&categoryPagelist=4',
-         'http://mall.hanssem.com/goods/goodsDetailMall.do?gdsNo=264082&categoryPagelist=1',
-         'http://mall.hanssem.com/goods/goodsDetailMall.do?gdsNo=296683&categoryPagelist=1',
-         'http://mall.hanssem.com/goods/goodsDetailMall.do?gdsNo=202365&categoryPagelist=2'
+"""
+links = ['http://mall.hanssem.com/goods/goodsDetailMall.do?gdsNo=290349&categoryPagelist=4',
+         'http://mall.hanssem.com/goods/goodsDetailMall.do?gdsNo=198145&categoryPagelist=2',
+         'http://mall.hanssem.com/goods/goodsDetailMall.do?gdsNo=249788&categoryPagelist=3',
+         'http://mall.hanssem.com/goods/goodsDetailMall.do?gdsNo=378928&categoryPagelist=2',
+         'http://mall.hanssem.com/goods/goodsDetailMall.do?gdsNo=213665&categoryPagelist=2',
+         'http://mall.hanssem.com/goods/goodsDetailMall.do?gdsNo=244750'
          ]
+"""
 
+fur_room_kind_link = fetch_room_kind_link()
+#link = fetch_fur_link('http://mall.hanssem.com/category/goHsmMctgy.do?ctgrNo=6998&categoryall=M6998')
+#print(link)
+
+count = 0;
+
+for fur_kind_link in fur_room_kind_link:
+    fur_link = fetch_fur_link(fur_kind_link)
+    for post_link in fur_link:
+        try:
+            contents = fetch_post_contents(post_link)
+            if re.search('소파|침대|책상|옷장|받침대|수납장|장식장|테이블|책장|의자|서랍|화장대', contents.get('craw_fur_kind_name')):
+                conn.insert(contents)
+                print(contents)
+                count = count+1
+                print(count)
+        except:
+            print('컨텐츠 에러')
+            continue
+        
+print(count)
+
+"""
 for link in links:
     a = fetch_post_contents(link)
     print(a)
-
-
+"""
 
 
 
