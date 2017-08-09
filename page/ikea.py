@@ -209,7 +209,7 @@ def fetch_post_contents(link):
                     height = re.search('\d+', craw_fur_size[i]).group()+'0'
                     #print(height)
             
-            craw_fur_size = [width,depth,height]
+            craw_fur_size = [int(width),int(depth),int(height)]
         except IndexError:
             craw_fur_size = ''
         except UnboundLocalError:
@@ -266,12 +266,15 @@ i = 0
 for URL in target_url:
     links = fetch_post_list(URL)
     for link in links:
-        result = fetch_post_contents(link)
+        try:
+            result = fetch_post_contents(link)
         
-        if re.search('소파|침대|책상|옷장|받침대|수납장|장식장|테이블|책장|의자|서랍|화장대', result.get('craw_fur_kind_name')):
-            i=i+1
-            print(result)
-            conn.insert(result)
+            if re.search('소파|침대|책상|옷장|받침대|수납장|장식장|테이블|책장|의자|서랍|화장대', result.get('craw_fur_kind_name')):
+                i=i+1
+                print(result)
+                #conn.insert(result)
+        except:
+            continue
         
 
 print(i)
