@@ -16,19 +16,26 @@ import pymongo
 from pip._vendor.requests.utils import _null
 from selenium.common.exceptions import NoSuchElementException
 import os
+import cx_Oracle  # @UnresolvedImport
 
 from konlpy.tag import Twitter
 
+#몽고디비 접속
 conn = pymongo.MongoClient('192.168.1.28', 27017)
 db = conn.gaduda
 collection = db.rep_test
+
+#오라클 접속
+ora_dsn = cx_Oracle.makedsn('192.168.1.20', 1521, 'orcl')
+ora_conn = cx_Oracle.connect('ora_user', '1234', ora_dsn)
+ora_cursor = ora_conn.cursor()
 
 #driver = webdriver.Chrome('D:\chromedriver_win32\chromedriver')
 driver = webdriver.PhantomJS(executable_path=r'C:\phantomjs-2.1.1-windows\bin\phantomjs')
 
 #site = 'http://www.11st.co.kr/product/SellerProductDetail.tmall?method=getSellerProductDetail&prdNo=1322253347&trTypeCd=20&trCtgrNo=585021&lCtgrNo=1001364&mCtgrNo=1002273'
 #site= 'http://www.11st.co.kr/product/SellerProductDetail.tmall?method=getSellerProductDetail&prdNo=96531135&trTypeCd=20&trCtgrNo=1002273'
-site = 'http://www.11st.co.kr/product/SellerProductDetail.tmall?method=getSellerProductDetail&prdNo=32074832&trTypeCd=20&trCtgrNo=1002276'
+site = 'http://www.11st.co.kr/product/SellerProductDetail.tmall?method=getSellerProductDetail&prdNo=775694796&trTypeCd=21&trCtgrNo=1002208'
 #site = 'http://www.11st.co.kr/product/SellerProductDetail.tmall?method=getSellerProductDetail&prdNo=1367968916&trTypeCd=20&trCtgrNo=1002276'
 #site = 'http://www.11st.co.kr/product/SellerProductDetail.tmall?method=getSellerProductDetail&prdNo=1335741053&trTypeCd=21&trCtgrNo=1002276'
 #site = 'http://www.11st.co.kr/product/SellerProductDetail.tmall?method=getSellerProductDetail&prdNo=1319927303&trTypeCd=20&trCtgrNo=1002276'
@@ -61,21 +68,29 @@ site_arr = ['http://www.11st.co.kr/product/SellerProductDetail.tmall?method=getS
 #site = 'http://www.11st.co.kr/product/SellerProductDetail.tmall?method=getSellerProductDetail&prdNo=45764635&trTypeCd=20&trCtgrNo=1002213'
 #site = 'http://www.11st.co.kr/product/SellerProductDetail.tmall?method=getSellerProductDetail&prdNo=240435243&trTypeCd=20&trCtgrNo=1002215'
 
-p = 1
+fur_no = 1
 
 def review_fetch(site):
     #driver.refresh()
     driver.get(site)
-
-    driver.switch_to_frame('ifrmReview')
-    text = driver.find_element_by_class_name('review_list').text
     
+    try:
+        driver.switch_to_frame('ifrmReview')
+        text = driver.find_element_by_class_name('review_list').text
+    except:
+        try:
+            driver.switch_to_frame('ifrmReview')
+            text = driver.find_element_by_class_name('review_list').text
+        except:
+            driver.switch_to_frame('ifrmReview')
+            text = driver.find_element_by_class_name('review_list').text
     
     #contents = driver.find_elements_by_class_name('summ_conts')
     
     all_review_contents = ''
     all_pages_nums_text = []
     page_nums_arr = []
+    click_count = 1
     while True:
         page_nums = driver.find_element_by_class_name('s_paging_v2').text
         
@@ -87,6 +102,9 @@ def review_fetch(site):
             next_click.click()
             driver.implicitly_wait(1)
             sleep(1)
+            click_count = click_count + 1
+            if click_count == 7:
+                break
             print('다음페이지 클릭')
         except NoSuchElementException:
             print('엘스문')
@@ -95,6 +113,7 @@ def review_fetch(site):
     print('와일문나옴')
     print(all_pages_nums_text)
     print(len(all_pages_nums_text))
+
     
     driver.get(site)
     driver.implicitly_wait(2)
@@ -123,7 +142,7 @@ def review_fetch(site):
         for j in range(0,len(contents)):
             #print(contents[j].text)
             all_review_contents = all_review_contents + '\n' + contents[j].text
-            collection.insert({'fur_no':p, 'fur_name':'에스엔가구 모던 3단 협탁', 'contents':contents[j].text })
+            #collection.insert({'fur_no':fur_no, 'fur_name':'에스엔가구 모던 3단 협탁', 'contents':contents[j].text })
             
         if int(i)%10 == 0:
             try:
@@ -134,7 +153,8 @@ def review_fetch(site):
                 print('다음페이지 클릭')
             except:
                 print('다음페이지 없음')
-            
+        #if all_pages_nums_text == '60':
+        #    break
             
             #all_reivew_contents = all_reivew_contents +'\n' + contents.text
             #print(contents.text)
@@ -146,7 +166,7 @@ def review_fetch(site):
 
   
     return {
-        'fur_no' : p,
+        'fur_no' : fur_no,
         'fur_name' : '아아아아아',
         'fur_est_contents' : all_review_contents
         }
@@ -155,9 +175,13 @@ def review_fetch(site):
 
 def keword_extractor(tagger, text):
     tokens = tagger.phrases(text)
+
     tokens = [ token for token in tokens if len(token) > 1]
+
     count_dict = [(token, text.count(token)) for token in tokens]
+
     ranked_words = sorted(count_dict, key = lambda x:x[1], reverse = True)[:50]
+
     
     return [keyword for keyword, freq in ranked_words]
 if __name__ == '__main__':
@@ -175,60 +199,68 @@ if __name__ == '__main__':
     all_est_text = ''
     for review_text in review_text_arr:
         if re.search("깔끔", review_text):
-            all_est_text = all_est_text + ' / ' + '깔끔합니다'
+            all_est_text = all_est_text + '/' + '깔끔합니다'
             
         if re.search("만족|마음", review_text):
-            all_est_text = all_est_text + ' / ' + '만족합니다'
+            all_est_text = all_est_text + '/' + '만족합니다'
             
         if re.search("가격대|저렴", review_text):
-            all_est_text = all_est_text + ' / ' + '가성비 좋네요'
+            all_est_text = all_est_text + '/' + '가성비 좋네요'
     
         if re.search("이쁘|이쁨", review_text):
-            all_est_text = all_est_text + ' / ' + '이뻐요'
+            all_est_text = all_est_text + '/' + '이뻐요'
             
         if re.search('디자인', review_text):
-            all_est_text = all_est_text + ' / ' + '디자인이 마음에 들어요'
+            all_est_text = all_est_text + '/' + '디자인이 마음에 들어요'
 
         if re.search('강추|최고', review_text):
-            all_est_text = all_est_text + ' / ' + '강추합니다'
+            all_est_text = all_est_text + '/' + '강추합니다'
             
         if re.search('고급', review_text):
-            all_est_text = all_est_text + ' / ' + '고급집니다'
+            all_est_text = all_est_text + '/' + '고급집니다'
             
         if re.search('쿠션감', review_text):
-            all_est_text = all_est_text + ' / ' + '쿠션감이 좋아요'
+            all_est_text = all_est_text + '/' + '쿠션감이 좋아요'
             
         if re.search('냄새', review_text):
-            all_est_text = all_est_text + ' / ' + '약간의 냄새가 나요'
+            all_est_text = all_est_text + '/' + '약간의 냄새가 나요'
             
         if re.search('색상|색깔', review_text):
-            all_est_text = all_est_text + ' / ' + '색상이 이뻐요'
+            all_est_text = all_est_text + '/' + '색상이 이뻐요'
         
         if re.search('분위기', review_text):
-            all_est_text = all_est_text + ' / ' + '분위기 있어요'
+            all_est_text = all_est_text + '/' + '분위기 있어요'
             
         if re.search('아이|아기', review_text):
-            all_est_text = all_est_text + ' / ' + '아이방에 두기 좋아요'
+            all_est_text = all_est_text + '/' + '아이방에 두기 좋아요'
             
         if re.search('기능', review_text):
-            all_est_text = all_est_text + ' / ' + '기능이 좋아요'
+            all_est_text = all_est_text + '/' + '기능이 좋아요'
             
         if re.search('편안', review_text):
-            all_est_text = all_est_text + ' / ' + '편안해요'
+            all_est_text = all_est_text + '/' + '편안해요'
             
         if re.search('고급', review_text):
-            all_est_text = all_est_text + ' / ' + '고급져요'
+            all_est_text = all_est_text + '/' + '고급져요'
             
         if re.search('소리|소음|삐그덕', review_text):
-            all_est_text = all_est_text + ' / ' + '약간의 소리가 나요'
+            all_est_text = all_est_text + '/' + '약간의 소리가 나요'
         
+        
+    all_est_text_arr = re.split('/', all_est_text)
+    mySet = set(all_est_text_arr)
+    changed_list = list(mySet)    
+    changed_list.remove('')
 
-    print(all_est_text)
+    print(all_est_text_arr)
+    print(changed_list)
     
+    #for i in range(0, len(changed_list)):
+    #    statement = 'insert into furniture_simple_review(fur_simple_review_no, fur_no, fur_simple_review_content) values (seq_fur_simple_review.nextval,:2,:3)'
+    #    ora_cursor.execute(statement, (fur_no, changed_list[i]))
     
-    
-    
-    
+    #ora_conn.commit()
+    print('커밋완료')
     
     
     

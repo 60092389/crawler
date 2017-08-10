@@ -28,6 +28,8 @@ query = 'select fur_name from furniture where fur_no = '
 fur_no = '3'
 
 
+
+
 cursor.execute(query+fur_no)   
 fur_name = ''
 for result in cursor:
@@ -36,4 +38,29 @@ for result in cursor:
 cursor.execute('select * from furniture')
 for kk in cursor:
     print(kk)
+    
+#insert
+statement = 'insert into furniture_simple_review(fur_simple_review_no, fur_no, fur_simple_review_content) values (seq_fur_simple_review.nextval,:2,:3)'
+
+cursor.execute(statement, (1, '만족합니다'))
+
+conn.commit()    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
